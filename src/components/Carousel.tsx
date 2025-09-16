@@ -10,36 +10,51 @@ interface CarouselProps {
 
 export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const isNavigatingRef = useRef(false);
 
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
     const handleScroll = () => {
+      // Don't update focus during programmatic navigation
+      if (isNavigatingRef.current) return;
+      
       const scrollLeft = carousel.scrollLeft;
-      const cardWidth = carousel.clientWidth * 0.8; // Card width is 80% of viewport
+      const cardWidth = carousel.clientWidth * 0.8;
       const newIndex = Math.round(scrollLeft / cardWidth);
-      const clampedIndex = Math.min(newIndex, windowData.length - 1);
+      const clampedIndex = Math.min(Math.max(newIndex, 0), windowData.length - 1);
+      console.log('Scroll event - updating focus to:', clampedIndex);
       onFocusChange(clampedIndex);
     };
 
     carousel.addEventListener('scroll', handleScroll);
     return () => carousel.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [onFocusChange]);
 
   const scrollToCard = (index: number) => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
+    console.log('Scrolling to card:', index);
+    isNavigatingRef.current = true;
+    
     const cardWidth = carousel.clientWidth * 0.8;
     carousel.scrollTo({
       left: index * cardWidth,
       behavior: 'smooth'
     });
+
+    // Reset the flag after scrolling completes
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+      console.log('Navigation complete, re-enabling scroll listener');
+    }, 500);
   };
 
   // Scroll to card when focusedIndex changes externally (from navbar)
   useEffect(() => {
+    console.log('focusedIndex changed to:', focusedIndex);
     scrollToCard(focusedIndex);
   }, [focusedIndex]);
 
