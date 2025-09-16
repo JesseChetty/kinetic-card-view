@@ -1,13 +1,52 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { SEO } from '../components/SEO';
+import { Carousel } from '../components/Carousel';
+import { Modal } from '../components/Modal';
+import { Navbar } from '../components/Navbar';
 
 const Index = () => {
+  const [modalContent, setModalContent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
+  const handleCardClick = (data: any) => {
+    setModalContent(data);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
+
+  const handleNavigate = (index: number) => {
+    setFocusedIndex(index);
+    // You can add scroll logic here if needed
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <SEO 
+        title="John Doe - Full-Stack Developer & UI/UX Designer"
+        description="Experienced full-stack developer specializing in React, Node.js, and modern web technologies. View my portfolio of innovative projects and get in touch."
+        keywords="full-stack developer, React developer, Node.js, web development, UI/UX design, portfolio"
+        canonicalUrl="https://portfolio.dev"
+      />
+      
+      <main className="min-h-screen gradient-hero">
+        <Navbar focusedIndex={focusedIndex} onNavigate={handleNavigate} />
+        
+        <div className="pt-16">
+          <Carousel onCardClick={handleCardClick} />
+        </div>
+
+        <Modal 
+          isOpen={isModalOpen}
+          content={modalContent}
+          onClose={closeModal}
+        />
+      </main>
+    </>
   );
 };
 
