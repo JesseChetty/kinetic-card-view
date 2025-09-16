@@ -4,11 +4,12 @@ import { windowData } from '../data/portfolioData';
 
 interface CarouselProps {
   onCardClick: (data: any) => void;
+  focusedIndex: number;
+  onFocusChange: (index: number) => void;
 }
 
-export const Carousel = ({ onCardClick }: CarouselProps) => {
+export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [focusedIndex, setFocusedIndex] = useState(0);
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -18,7 +19,8 @@ export const Carousel = ({ onCardClick }: CarouselProps) => {
       const scrollLeft = carousel.scrollLeft;
       const cardWidth = carousel.clientWidth * 0.8; // Card width is 80% of viewport
       const newIndex = Math.round(scrollLeft / cardWidth);
-      setFocusedIndex(Math.min(newIndex, windowData.length - 1));
+      const clampedIndex = Math.min(newIndex, windowData.length - 1);
+      onFocusChange(clampedIndex);
     };
 
     carousel.addEventListener('scroll', handleScroll);
@@ -35,6 +37,11 @@ export const Carousel = ({ onCardClick }: CarouselProps) => {
       behavior: 'smooth'
     });
   };
+
+  // Scroll to card when focusedIndex changes externally (from navbar)
+  useEffect(() => {
+    scrollToCard(focusedIndex);
+  }, [focusedIndex]);
 
   return (
     <div className="relative h-screen overflow-hidden">

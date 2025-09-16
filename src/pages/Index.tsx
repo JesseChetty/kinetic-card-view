@@ -21,7 +21,6 @@ const Index = () => {
 
   const handleNavigate = (index: number) => {
     setFocusedIndex(index);
-    // You can add scroll logic here if needed
   };
 
   return (
@@ -37,7 +36,11 @@ const Index = () => {
         <Navbar focusedIndex={focusedIndex} onNavigate={handleNavigate} />
         
         <div className="pt-16">
-          <Carousel onCardClick={handleCardClick} />
+          <Carousel 
+            onCardClick={handleCardClick}
+            focusedIndex={focusedIndex}
+            onFocusChange={setFocusedIndex}
+          />
         </div>
 
         <Modal 
