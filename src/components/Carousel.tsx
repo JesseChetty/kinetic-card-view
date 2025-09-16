@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { Card } from './Card';
 import { windowData } from '../data/portfolioData';
 
@@ -11,6 +11,8 @@ interface CarouselProps {
 export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const isNavigatingRef = useRef(false);
+  const itemsRef = useRef<HTMLDivElement[]>([]);
+  const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -19,13 +21,27 @@ export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselP
     const handleScroll = () => {
       // Don't update focus during programmatic navigation
       if (isNavigatingRef.current) return;
-      
-      const scrollLeft = carousel.scrollLeft;
-      const cardWidth = carousel.clientWidth * 0.8;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      const clampedIndex = Math.min(Math.max(newIndex, 0), windowData.length - 1);
-      console.log('Scroll event - updating focus to:', clampedIndex);
-      onFocusChange(clampedIndex);
+
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        if (!carousel) return;
+        const containerCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+        let nearestIndex = 0;
+        let minDistance = Infinity;
+
+        itemsRef.current.forEach((item, idx) => {
+          if (!item) return;
+          const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+          const distance = Math.abs(itemCenter - containerCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestIndex = idx;
+          }
+        });
+
+        onFocusChange(nearestIndex);
+        rafIdRef.current = null;
+      });
     };
 
     carousel.addEventListener('scroll', handleScroll);
@@ -33,23 +49,17 @@ export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselP
   }, [onFocusChange]);
 
   const scrollToCard = (index: number) => {
+    const item = itemsRef.current[index];
     const carousel = carouselRef.current;
-    if (!carousel) return;
+    if (!item || !carousel) return;
 
-    console.log('Scrolling to card:', index);
     isNavigatingRef.current = true;
-    
-    const cardWidth = carousel.clientWidth * 0.8;
-    carousel.scrollTo({
-      left: index * cardWidth,
-      behavior: 'smooth'
-    });
+    item.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
 
     // Reset the flag after scrolling completes
     setTimeout(() => {
       isNavigatingRef.current = false;
-      console.log('Navigation complete, re-enabling scroll listener');
-    }, 500);
+    }, 600);
   };
 
   // Scroll to card when focusedIndex changes externally (from navbar)
@@ -68,6 +78,7 @@ export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselP
         {windowData.map((data, index) => (
           <div
             key={data.id}
+            ref={(el) => { if (el) itemsRef.current[index] = el; }}
             className="carousel-item flex-shrink-0 w-[80vw] h-full flex items-center justify-center"
           >
             <Card
