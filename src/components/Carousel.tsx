@@ -62,13 +62,13 @@ export const Carousel = ({ onCardClick, focusedIndex, onFocusChange }: CarouselP
     <div className="relative h-screen overflow-hidden">
       <div
         ref={carouselRef}
-        className="carousel-snap flex h-full overflow-x-auto overflow-y-hidden scrollbar-hide"
+        className="carousel-snap flex h-full overflow-x-auto overflow-y-hidden scrollbar-hide pl-[10vw] pr-[10vw]"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {windowData.map((data, index) => (
           <div
             key={data.id}
-            className="carousel-item flex-shrink-0 w-[80vw] h-full flex items-center justify-center px-4"
+            className="carousel-item flex-shrink-0 w-[80vw] h-full flex items-center justify-center"
           >
             <Card
               data={data}
