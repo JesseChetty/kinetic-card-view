@@ -2,6 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faExternalLinkAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin, faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { skillsData, projectsData, testimonialsData, servicesData, contactInfo } from '../data/portfolioData';
+import { Gitlantis } from './Gitlantis';
+import { KeyboardControls } from '@react-three/drei';
+import { useState } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,7 +13,20 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  
   if (!isOpen || !content) return null;
+
+  const keyboardMap = [
+    { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
+    { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
+    { name: 'left', keys: ['ArrowLeft', 'KeyA'] },
+    { name: 'right', keys: ['ArrowRight', 'KeyD'] },
+  ];
+
+  const handleProjectSelect = (project: any) => {
+    setSelectedProject(project);
+  };
 
   const renderContent = () => {
     switch (content.title) {
@@ -84,56 +100,61 @@ export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
 
       case 'Projects':
         return (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-3xl font-bold mb-4">Featured Projects</h2>
-              <p className="text-lg text-muted-foreground">
-                A selection of my recent work and personal projects
+              <h2 className="text-3xl font-bold mb-4">Project Explorer</h2>
+              <p className="text-lg text-muted-foreground mb-2">
+                Navigate through my projects in an immersive 3D ocean world
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Use <kbd className="px-2 py-1 bg-muted rounded text-xs">WASD</kbd> to sail your boat and click lighthouses to explore projects
               </p>
             </div>
             
-            <div className="grid gap-8">
-              {projectsData.map((project) => (
-                <div key={project.id} className="glass-effect rounded-xl overflow-hidden">
-                  <div className="md:flex">
-                    <div className="md:w-1/3">
-                      <img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-48 md:h-full object-cover"
-                      />
+            <div className="w-full h-[600px] rounded-xl overflow-hidden border border-border">
+              <KeyboardControls map={keyboardMap}>
+                <Gitlantis onProjectSelect={handleProjectSelect} />
+              </KeyboardControls>
+            </div>
+
+            {selectedProject && (
+              <div className="glass-effect rounded-xl p-6 animate-fade-in">
+                <div className="flex items-start space-x-4">
+                  <img 
+                    src={selectedProject.image} 
+                    alt={selectedProject.title}
+                    className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
+                  />
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold mb-2 text-primary">{selectedProject.title}</h3>
+                    <p className="text-muted-foreground mb-3">{selectedProject.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {selectedProject.technologies.map((tech: string, idx: number) => (
+                        <span key={idx} className="px-2 py-1 bg-primary/20 text-primary rounded text-xs">
+                          {tech}
+                        </span>
+                      ))}
                     </div>
-                    <div className="md:w-2/3 p-6">
-                      <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-                      <p className="text-muted-foreground mb-4">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.technologies.map((tech, idx) => (
-                          <span key={idx} className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex space-x-4">
-                        <a 
-                          href={project.github} 
-                          className="flex items-center space-x-2 text-primary hover:text-primary/80 transition-colors"
-                        >
-                          <FontAwesomeIcon icon={faGithub} />
-                          <span>Code</span>
-                        </a>
-                        <a 
-                          href={project.live} 
-                          className="flex items-center space-x-2 text-primary hover:text-primary/80 transition-colors"
-                        >
-                          <FontAwesomeIcon icon={faExternalLinkAlt} />
-                          <span>Live Demo</span>
-                        </a>
-                      </div>
+                    <div className="flex space-x-4">
+                      <a 
+                        href={selectedProject.github} 
+                        className="flex items-center space-x-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faGithub} />
+                        <span>Code</span>
+                      </a>
+                      <a 
+                        href={selectedProject.live} 
+                        className="flex items-center space-x-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        <span>Live Demo</span>
+                      </a>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         );
 

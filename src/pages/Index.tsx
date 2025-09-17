@@ -3,16 +3,11 @@ import { SEO } from '../components/SEO';
 import { Carousel } from '../components/Carousel';
 import { Modal } from '../components/Modal';
 import { Navbar } from '../components/Navbar';
-import { Gitlantis } from '../components/Gitlantis';
-import { Button } from '../components/ui/button';
-import { KeyboardControls } from '@react-three/drei';
-import { Eye, Grid3X3 } from 'lucide-react';
 
 const Index = () => {
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const [view3D, setView3D] = useState(false);
 
   const handleCardClick = (data: any) => {
     setModalContent(data);
@@ -28,13 +23,6 @@ const Index = () => {
     setFocusedIndex(index);
   };
 
-  const keyboardMap = [
-    { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
-    { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
-    { name: 'left', keys: ['ArrowLeft', 'KeyA'] },
-    { name: 'right', keys: ['ArrowRight', 'KeyD'] },
-  ];
-
   return (
     <>
       <SEO 
@@ -44,46 +32,16 @@ const Index = () => {
         canonicalUrl="https://portfolio.dev"
       />
       
-      <main className="min-h-screen gradient-hero relative">
-        {/* View Toggle */}
-        <div className="absolute top-4 right-4 z-20">
-          <Button
-            onClick={() => setView3D(!view3D)}
-            variant="secondary"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            {view3D ? (
-              <>
-                <Grid3X3 className="w-4 h-4" />
-                Gallery View
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" />
-                3D Explorer
-              </>
-            )}
-          </Button>
+      <main className="min-h-screen gradient-hero">
+        <Navbar focusedIndex={focusedIndex} onNavigate={handleNavigate} />
+        
+        <div className="pt-16">
+          <Carousel 
+            onCardClick={handleCardClick}
+            focusedIndex={focusedIndex}
+            onFocusChange={setFocusedIndex}
+          />
         </div>
-
-        {view3D ? (
-          <KeyboardControls map={keyboardMap}>
-            <Gitlantis onProjectSelect={handleCardClick} />
-          </KeyboardControls>
-        ) : (
-          <>
-            <Navbar focusedIndex={focusedIndex} onNavigate={handleNavigate} />
-            
-            <div className="pt-16">
-              <Carousel 
-                onCardClick={handleCardClick}
-                focusedIndex={focusedIndex}
-                onFocusChange={setFocusedIndex}
-              />
-            </div>
-          </>
-        )}
 
         <Modal 
           isOpen={isModalOpen}
