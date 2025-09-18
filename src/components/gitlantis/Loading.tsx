@@ -6,11 +6,12 @@ export const Loading = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (progress === 100) {
-      const timer = setTimeout(() => setIsVisible(false), 500);
+    // If no assets to load (total === 0) or progress is 100, hide loading screen
+    if (progress === 100 || total === 0) {
+      const timer = setTimeout(() => setIsVisible(false), 1000);
       return () => clearTimeout(timer);
     }
-  }, [progress]);
+  }, [progress, total]);
 
   if (!isVisible) return null;
 
