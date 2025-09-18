@@ -15,10 +15,9 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
 
   useFrame((state) => {
     if (buoyRef.current) {
-      // Bobbing animation
+      // Simplified bobbing animation
       const time = state.clock.getElapsedTime();
-      buoyRef.current.position.y = position[1] + Math.sin(time * 1.5 + position[0]) * 0.2;
-      buoyRef.current.rotation.z = Math.sin(time + position[0]) * 0.1;
+      buoyRef.current.position.y = Math.sin(time * 1.5 + position[0]) * 0.3;
     }
   });
 
@@ -50,31 +49,24 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
       }}
     >
       {/* Buoy Float */}
-      <Sphere args={[1]} position={[0, 0, 0]} castShadow>
+      <mesh position={[0, 0, 0]} castShadow>
+        <sphereGeometry args={[1]} />
         <meshStandardMaterial 
           color={hovered ? '#ffffff' : getColorByCategory(skill.category)}
-          emissive={hovered ? getColorByCategory(skill.category) : '#000000'}
-          emissiveIntensity={hovered ? 0.2 : 0}
         />
-      </Sphere>
+      </mesh>
       
       {/* Buoy Pole */}
-      <Cylinder args={[0.1, 0.1, 2]} position={[0, 1.5, 0]} castShadow>
+      <mesh position={[0, 1.5, 0]} castShadow>
+        <cylinderGeometry args={[0.1, 0.1, 2]} />
         <meshStandardMaterial color="#654321" />
-      </Cylinder>
+      </mesh>
       
       {/* Skill Level Indicator */}
-      <Cylinder 
-        args={[0.15, 0.15, (skill.level / 100) * 2]} 
-        position={[0, 1.5 + (skill.level / 100), 0]} 
-        castShadow
-      >
-        <meshStandardMaterial 
-          color={getColorByCategory(skill.category)}
-          emissive={getColorByCategory(skill.category)}
-          emissiveIntensity={0.3}
-        />
-      </Cylinder>
+      <mesh position={[0, 1.5 + (skill.level / 100), 0]} castShadow>
+        <cylinderGeometry args={[0.15, 0.15, (skill.level / 100) * 2]} />
+        <meshStandardMaterial color={getColorByCategory(skill.category)} />
+      </mesh>
       
       {/* Skill Name */}
       <Text

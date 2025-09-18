@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Plane } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const Ocean = () => {
@@ -9,28 +8,26 @@ export const Ocean = () => {
   useFrame((state) => {
     if (oceanRef.current) {
       const time = state.clock.getElapsedTime();
-      // Simple rotation animation
-      oceanRef.current.rotation.z = Math.sin(time * 0.1) * 0.02;
+      // Simple wave animation
+      oceanRef.current.position.y = Math.sin(time * 0.5) * 0.1;
     }
   });
 
-  // Simplified ocean material to avoid WebGL context issues
-  const oceanMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0077be,
-    transparent: true,
-    opacity: 0.8,
-    roughness: 0.1,
-    metalness: 0.1,
-  });
-
   return (
-    <Plane
+    <mesh
       ref={oceanRef}
-      args={[200, 200]}
       rotation={[-Math.PI / 2, 0, 0]}
       position={[0, -1, 0]}
-      material={oceanMaterial}
       receiveShadow
-    />
+    >
+      <planeGeometry args={[200, 200, 50, 50]} />
+      <meshStandardMaterial
+        color="#0077be"
+        transparent
+        opacity={0.8}
+        roughness={0.1}
+        metalness={0.1}
+      />
+    </mesh>
   );
 };
