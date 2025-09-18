@@ -20,7 +20,7 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
   const { selectedProject, boatPosition } = useGitlantisStore();
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-sky-400 via-sky-200 to-blue-600 overflow-hidden">
+    <div className="relative w-full h-screen bg-gradient-to-b from-sky-300 via-sky-100 to-blue-500 overflow-hidden">
       <SEO 
         title="Portfolio Explorer - Interactive 3D Navigation"
         description="Explore my portfolio projects in an immersive 3D ocean world. Navigate through projects as lighthouses and skills as buoys."

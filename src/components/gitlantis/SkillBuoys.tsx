@@ -94,17 +94,27 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
 };
 
 export const SkillBuoys = ({ skills }: SkillBuoysProps) => {
+  // Generate fixed positions to prevent repositioning on re-renders
+  const buoyPositions = skills.map((_, index) => {
+    const angle = (index / skills.length) * Math.PI * 2;
+    const radius = 15;
+    const offsetX = Math.sin(index * 1.234) * 5; // Fixed pseudo-random offset
+    const offsetZ = Math.cos(index * 2.345) * 5; // Fixed pseudo-random offset
+    
+    return [
+      Math.sin(angle) * radius + offsetX,
+      0,
+      Math.cos(angle) * radius + offsetZ
+    ] as [number, number, number];
+  });
+
   return (
     <group>
       {skills.map((skill, index) => (
         <Buoy
           key={skill.name}
           skill={skill}
-          position={[
-            Math.sin((index / skills.length) * Math.PI * 2) * 15 + Math.random() * 5,
-            0,
-            Math.cos((index / skills.length) * Math.PI * 2) * 15 + Math.random() * 5
-          ]}
+          position={buoyPositions[index]}
         />
       ))}
     </group>
