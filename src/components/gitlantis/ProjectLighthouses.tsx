@@ -86,7 +86,6 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
         color={hovered ? "#ff6b6b" : "#333"}
         anchorX="center"
         anchorY="middle"
-        font="/fonts/inter-bold.woff"
       >
         {project.title}
       </Text>

@@ -29,9 +29,10 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       />
       
       <Canvas
-        camera={{ position: [0, 15, 10], fov: 60 }}
+        camera={{ position: [0, 8, 15], fov: 75 }}
         shadows
         className="w-full h-full"
+        gl={{ antialias: true, alpha: false }}
       >
         <Suspense fallback={null}>
           {/* Lighting */}
