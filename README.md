@@ -1,294 +1,286 @@
-# Portfolio Website Documentation
+# Portfolio Website with 3D Gitlantis Explorer
 
-## Project Overview
+A modern, interactive portfolio website featuring a unique 3D ocean world explorer built with React, Three.js, and Tailwind CSS.
 
-This is a modern, interactive portfolio website built with React, TypeScript, and Tailwind CSS. It features a unique carousel-based navigation system where users can scroll through different sections horizontally, with each section displaying as a card that can be clicked for detailed modal views.
+## 🌊 Features
 
-## Technology Stack
+- **Interactive 3D Portfolio Explorer**: Navigate through an immersive ocean world where projects appear as lighthouses and skills as floating buoys
+- **Responsive Carousel View**: Traditional 2D gallery view for browsing portfolio content
+- **Modern Design System**: Built with Tailwind CSS and shadcn/ui components
+- **SEO Optimized**: Comprehensive meta tags, structured data, and semantic HTML
+- **Dark/Light Mode Support**: Automatic theme switching based on user preference
+- **Mobile Responsive**: Fully responsive design that works on all devices
 
-- **React 18** - Frontend framework
-- **TypeScript** - Type safety and better development experience
-- **Tailwind CSS** - Utility-first CSS framework with custom design system
-- **Vite** - Build tool and development server
-- **FontAwesome** - Icon library
-- **shadcn/ui** - UI component library
+## 🚀 Tech Stack
 
-## Project Structure
+- **Frontend**: React 18, TypeScript, Vite
+- **3D Graphics**: Three.js, React Three Fiber, React Three Drei
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **State Management**: Zustand
+- **Icons**: FontAwesome, Lucide React
+- **Animations**: Tailwind CSS animations with custom keyframes
+
+## 📁 Project Structure
 
 ```
 src/
-├── components/
-│   ├── ui/                 # shadcn/ui components
-│   ├── Card.tsx           # Main card component for carousel items
-│   ├── Carousel.tsx       # Horizontal scrolling carousel
-│   ├── Modal.tsx          # Modal system for detailed views
-│   ├── Navbar.tsx         # Top navigation with mobile menu
-│   └── SEO.tsx            # SEO meta tags component
-├── data/
-│   └── portfolioData.ts   # All website content and data
-├── pages/
-│   ├── Index.tsx          # Main page component
-│   └── NotFound.tsx       # 404 error page
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions
-└── index.css             # Global styles and design tokens
+├── components/           # Reusable UI components
+├── components/ui/        # shadcn/ui components
+├── components/gitlantis/ # 3D world components
+├── data/                # Portfolio and asset configuration
+├── hooks/               # Custom React hooks
+├── pages/               # Page components
+└── lib/                 # Utility functions
 ```
 
-## Key Features
+## 🎨 Customizing Your Portfolio
 
-### 1. Carousel Navigation System
-- **File**: `src/components/Carousel.tsx`
-- Horizontal scrolling carousel that displays portfolio sections as cards
-- Smooth scrolling with snap-to-center behavior
-- Navigation indicators at the bottom
-- Keyboard and mouse wheel support
-- Mobile-friendly touch navigation
+### Content Management
 
-### 2. Card System
-- **File**: `src/components/Card.tsx`
-- Two card types: `hero` and standard cards
-- Hero card: Large intro section with name and tagline
-- Standard cards: Section previews with icons, titles, and descriptions
-- Focus states with scaling animations
-- Click interaction to open detailed modals
+#### Portfolio Data (`src/data/portfolioData.ts`)
 
-### 3. Modal System
-- **File**: `src/components/Modal.tsx`
-- Dynamic content rendering based on card type
-- Sections include: About, Skills, Projects, Testimonials, Contact
-- Responsive design with mobile-optimized layouts
-- Smooth animations and backdrop blur effects
+Edit your portfolio content by modifying the data structures:
 
-### 4. Responsive Navigation
-- **File**: `src/components/Navbar.tsx`
-- Desktop: Horizontal navigation bar with section indicators
-- Mobile: Hamburger menu with slide-in navigation
-- Active section highlighting
-- Smooth scrolling to sections when clicked
-
-### 5. SEO Optimization
-- **File**: `src/components/SEO.tsx`
-- Dynamic meta tags for title, description, keywords
-- Canonical URLs
-- Open Graph tags for social media sharing
-- Structured data support
-
-## Content Management
-
-### Portfolio Data Structure
-**File**: `src/data/portfolioData.ts`
-
-All website content is stored in this single file, making it easy to update:
-
-#### Navigation Windows (`windowData`)
 ```typescript
-{
-  id: string,           // Unique identifier
-  title: string,        // Card title
-  description: string,  // Card description
-  icon: string,         // FontAwesome icon name
-  type: 'hero' | 'standard' // Card display type
-}
+// Add/edit your projects
+export const projectsData = [
+  {
+    id: 1,
+    title: "Your Project Name",
+    description: "Project description",
+    image: "/path/to/image.jpg",
+    technologies: ["React", "TypeScript"],
+    github: "https://github.com/...",
+    live: "https://...",
+    featured: true
+  }
+];
+
+// Add/edit your skills
+export const skillsData = [
+  {
+    name: "React",
+    level: 90,
+    category: "Frontend"
+  }
+];
 ```
 
-#### Skills (`skillsData`)
+#### Personal Information
+
+Update contact info, social links, and testimonials in the same file.
+
+### 🏗️ 3D Asset Management
+
+#### Adding Custom 3D Models
+
+1. **Place your 3D files** in the `public/models/` directory
+2. **Configure assets** in `src/data/assets.ts`:
+
 ```typescript
-{
-  name: string,         // Skill name
-  level: number,        // Proficiency level (0-100)
-  icon: string,         // FontAwesome icon
-  category: string      // Skill category
-}
+export const boatAssets: AssetConfig[] = [
+  {
+    name: 'custom-boat',
+    path: '/models/your-boat.glb',
+    type: 'model',
+    description: 'Your custom boat model'
+  }
+];
+
+// Then update selected assets
+export const selectedAssets = {
+  boat: 'custom-boat', // Use your custom boat
+  // ... other assets
+};
 ```
 
-#### Projects (`projectsData`)
-```typescript
-{
-  id: string,
-  title: string,
-  description: string,
-  technologies: string[], // Array of tech stack
-  image: string,          // Project image URL
-  github: string,         // GitHub repository URL
-  live: string,           // Live demo URL
-  featured: boolean       // Featured project flag
-}
-```
+#### Supported 3D Formats
+- **GLB/GLTF**: Recommended for 3D models
+- **OBJ**: Basic 3D models
+- **JPG/PNG**: Textures
+- **HDR**: Environment maps/skyboxes
 
-#### Testimonials (`testimonialsData`)
-```typescript
-{
-  id: string,
-  name: string,          // Client name
-  role: string,          // Client position
-  content: string,       // Testimonial text
-  avatar: string,        // Avatar image URL
-  rating: number         // Rating (1-5)
-}
-```
+#### 3D Model Requirements
+- **Boat models**: Should be oriented facing forward (negative Z-axis)
+- **Lighthouse models**: Should be vertically oriented
+- **File size**: Keep under 5MB for good performance
+- **Textures**: Power-of-2 dimensions (512x512, 1024x1024, etc.)
 
-#### Services (`servicesData`)
-```typescript
-{
-  id: string,
-  title: string,
-  description: string,
-  icon: string,
-  features: string[]     // Array of service features
-}
-```
+### 🎨 Design System Customization
 
-#### Contact Information (`contactInfo`)
-```typescript
-{
-  email: string,
-  phone: string,
-  location: string,
-  github: string,        // GitHub profile URL
-  linkedin: string,      // LinkedIn profile URL
-  twitter: string        // Twitter profile URL
-}
-```
+#### Colors and Themes (`src/index.css`)
 
-## Design System
-
-### Color Tokens
-**File**: `src/index.css`
-
-The website uses a semantic color system with CSS custom properties:
+Customize your color palette:
 
 ```css
 :root {
-  --background: /* Main background color */
-  --foreground: /* Main text color */
-  --primary: /* Brand primary color */
-  --primary-foreground: /* Text on primary */
-  --secondary: /* Secondary accent color */
-  --muted: /* Muted/disabled elements */
-  --card: /* Card background */
-  --border: /* Border color */
-  /* ... and more */
+  --primary: 220 100% 50%;    /* Main brand color */
+  --secondary: 200 80% 60%;   /* Secondary color */
+  --accent: 280 90% 70%;      /* Accent color */
+  
+  /* Custom gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
 }
 ```
 
-### Design Guidelines
-- **Never use direct colors** like `text-white`, `bg-black`
-- **Always use semantic tokens** like `text-foreground`, `bg-background`
-- **Customize in** `src/index.css` and `tailwind.config.ts`
-- **Dark/light mode** support built-in
+#### Typography and Spacing (`tailwind.config.ts`)
 
-## How to Customize
+Modify design tokens:
 
-### 1. Update Content
-Edit `src/data/portfolioData.ts`:
-- **Personal Info**: Update hero section, contact details
-- **Skills**: Add/remove skills, adjust proficiency levels
-- **Projects**: Add new projects with images and links
-- **Testimonials**: Add client feedback
-- **Services**: Update service offerings
-
-### 2. Add New Sections
-1. Add new entry to `windowData` in `portfolioData.ts`
-2. Update `Modal.tsx` to handle the new section type
-3. Create content data structure if needed
-
-### 3. Modify Styling
-- **Colors**: Update CSS variables in `src/index.css`
-- **Components**: Modify component styles using Tailwind classes
-- **Animations**: Available in `tailwind.config.ts`
-
-### 4. Add New Components
-- Create in `src/components/`
-- Follow existing patterns for consistency
-- Use TypeScript interfaces for props
-- Implement responsive design
-
-## Development Commands
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Type checking
-npm run type-check
+```typescript
+theme: {
+  extend: {
+    fontFamily: {
+      sans: ['Your Font', 'sans-serif'],
+    },
+    colors: {
+      // Use semantic color tokens
+    }
+  }
+}
 ```
 
-## Animation System
+### 🌊 3D World Customization
 
-The website includes a comprehensive animation system:
-- **Fade animations**: `animate-fade-in`, `animate-fade-out`
-- **Scale animations**: `animate-scale-in`, `animate-scale-out`
-- **Slide animations**: `animate-slide-in-right`
-- **Hover effects**: `hover-scale`, `story-link`
-- **Combined animations**: `animate-enter`, `animate-exit`
+#### Ocean Settings (`src/components/gitlantis/Ocean.tsx`)
 
-## Mobile Responsiveness
+- **Color**: Change `color="#0077be"` to your preferred ocean color
+- **Size**: Modify `args={[200, 200, 50, 50]}` for ocean dimensions
+- **Animation**: Adjust wave speed in `Math.sin(time * 0.5)`
 
-- **Carousel**: Touch-friendly horizontal scrolling
-- **Navigation**: Hamburger menu with slide-in animation
-- **Cards**: Responsive sizing and typography
-- **Modals**: Mobile-optimized layouts and spacing
-- **Touch interactions**: Optimized for mobile devices
+#### Boat Controls (`src/components/gitlantis/Boat.tsx`)
 
-## SEO Best Practices
+- **Speed**: Change `speed = 0.1` for movement speed
+- **Rotation**: Modify `rotationSpeed = 0.02` for turning speed
+- **Camera**: Adjust follow distance in camera positioning logic
 
-- **Meta tags**: Dynamic title, description, keywords
-- **Semantic HTML**: Proper heading hierarchy and landmarks
-- **Image optimization**: Alt attributes and lazy loading
-- **Performance**: Optimized assets and code splitting
-- **Accessibility**: ARIA labels and keyboard navigation
+#### Lighthouse Positioning (`src/components/gitlantis/ProjectLighthouses.tsx`)
 
-## Deployment
+- **Circle radius**: Change `* 25` to spread lighthouses further/closer
+- **Height**: Modify lighthouse geometry args for different sizes
 
-The website can be deployed to any static hosting service:
-- **Vercel**: Connect GitHub repository for automatic deployments
-- **Netlify**: Drag and drop build folder or Git integration
-- **GitHub Pages**: Use GitHub Actions for deployment
-- **Traditional hosting**: Upload build folder to web server
+#### Buoy Distribution (`src/components/gitlantis/SkillBuoys.tsx`)
 
-## Browser Support
+- **Circle radius**: Change `radius = 15` for skill buoy placement
+- **Random offset**: Adjust `offsetX/offsetZ` calculations for scatter
 
-- **Modern browsers**: Chrome, Firefox, Safari, Edge (last 2 versions)
-- **Mobile browsers**: iOS Safari, Chrome Mobile, Samsung Internet
-- **Progressive enhancement**: Graceful degradation for older browsers
+### 🎵 Adding Audio
 
-## Performance Considerations
+1. **Add audio files** to `public/audio/`
+2. **Configure in assets.ts**:
 
-- **Code splitting**: Automatic with Vite
-- **Image optimization**: WebP format support
-- **CSS optimization**: Purged unused styles
-- **JavaScript**: Modern ES modules with fallbacks
-- **Lazy loading**: Images and components loaded on demand
+```typescript
+export const audioAssets: AssetConfig[] = [
+  {
+    name: 'ocean-waves',
+    path: '/audio/ocean-waves.mp3',
+    type: 'audio',
+    description: 'Ocean wave sounds'
+  }
+];
+```
 
-## Troubleshooting
+3. **Implement audio** in components using Web Audio API
 
-### Common Issues
-1. **Navigation glitches**: Check `focusedIndex` state management
-2. **Carousel positioning**: Verify scroll calculations in `Carousel.tsx`
-3. **Modal content**: Ensure data structure matches expected format
-4. **Styling issues**: Check if semantic tokens are used correctly
+### 📱 Responsive Design
 
-### Debug Mode
-Enable console logging in `Carousel.tsx` for navigation debugging.
+The website automatically adapts to different screen sizes:
 
-## Contributing
+- **Desktop**: Full 3D experience with all UI elements
+- **Tablet**: Optimized 3D controls and touch navigation
+- **Mobile**: Simplified 3D view with touch-friendly controls
 
-When making changes:
-1. **Test responsive design** on different screen sizes
-2. **Check accessibility** with screen readers
-3. **Validate TypeScript** types and interfaces
-4. **Test navigation flow** between all sections
-5. **Verify SEO tags** are updating correctly
+### ⚡ Performance Optimization
 
-## License
+#### 3D Performance
+- **Model optimization**: Use tools like gltf-pipeline to compress models
+- **Texture compression**: Use compressed formats (KTX2, WebP)
+- **LOD (Level of Detail)**: Implement different model qualities based on distance
 
-This project is available for personal and commercial use. Customize freely for your portfolio needs.
+#### Loading Optimization
+- **Lazy loading**: 3D assets load progressively
+- **Preloading**: Critical assets load first
+- **Caching**: Browser caches 3D models after first load
+
+## 🛠️ Development
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+```bash
+npm install
+```
+
+### Development Server
+```bash
+npm run dev
+```
+
+### Building for Production
+```bash
+npm run build
+```
+
+### Preview Production Build
+```bash
+npm run preview
+```
+
+## 🎮 3D Controls
+
+- **WASD Keys**: Move the boat
+- **Mouse**: Look around (when camera follow is disabled)
+- **Click Lighthouses**: View project details
+- **Hover Buoys**: See skill information
+- **Compass**: Shows boat orientation
+- **Minimap**: Overview of the 3D world
+- **Breadcrumbs**: Navigation trail
+
+## 🐛 Troubleshooting
+
+### 3D World Not Loading
+- Check browser WebGL support
+- Verify 3D model file paths
+- Look for console errors related to Three.js
+
+### Performance Issues
+- Reduce model polygon count
+- Compress textures
+- Lower canvas resolution in Canvas props
+
+### Assets Not Loading
+- Verify files are in `public/` directory
+- Check file paths in `assets.ts`
+- Ensure correct file formats
+
+## 📦 Deployment
+
+### Vercel (Recommended)
+1. Connect your GitHub repository
+2. Deploy automatically on push
+
+### Netlify
+1. Build command: `npm run build`
+2. Publish directory: `dist`
+
+### Custom Server
+1. Run `npm run build`
+2. Serve the `dist/` directory
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly (especially 3D functionality)
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - feel free to use this project as a template for your own portfolio!
+
+---
+
+**Happy coding! 🚀** If you create something cool with this template, we'd love to see it!

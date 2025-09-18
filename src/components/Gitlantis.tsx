@@ -32,7 +32,8 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
         camera={{ position: [0, 8, 15], fov: 75 }}
         shadows
         className="w-full h-full"
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: true, alpha: true }}
+        style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>
           {/* Lighting */}
