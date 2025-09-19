@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Text, Sphere, Cylinder } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useGitlantisStore } from '../../hooks/useGitlantisStore';
+import { getAssetConfig } from '../../data/assets';
+import { GLTFAsset } from './GLTFAsset';
 
 interface SkillBuoysProps {
   skills: any[];
@@ -12,6 +14,7 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
   const buoyRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const { setHoveredObject } = useGitlantisStore();
+  const buoyConfig = getAssetConfig('buoy');
 
   useFrame((state) => {
     if (buoyRef.current) {
@@ -48,27 +51,35 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
         document.body.style.cursor = 'auto';
       }}
     >
-      {/* Buoy Float */}
-      <mesh position={[0, 0, 0]} castShadow>
-        <sphereGeometry args={[1]} />
-        <meshStandardMaterial 
-          color={hovered ? '#ffffff' : getColorByCategory(skill.category)}
-        />
-      </mesh>
+      {/* Buoy Body */}
+      <GLTFAsset config={buoyConfig!}>
+        {/* Default Buoy - only shows when no GLB model */}
+        {!buoyConfig?.path && (
+          <>
+            {/* Buoy Float */}
+            <mesh position={[0, 0, 0]} castShadow>
+              <sphereGeometry args={[1]} />
+              <meshStandardMaterial 
+                color={hovered ? '#ffffff' : getColorByCategory(skill.category)}
+              />
+            </mesh>
+            
+            {/* Buoy Pole */}
+            <mesh position={[0, 1.5, 0]} castShadow>
+              <cylinderGeometry args={[0.1, 0.1, 2]} />
+              <meshStandardMaterial color="#654321" />
+            </mesh>
+            
+            {/* Skill Level Indicator */}
+            <mesh position={[0, 1.5 + (skill.level / 100), 0]} castShadow>
+              <cylinderGeometry args={[0.15, 0.15, (skill.level / 100) * 2]} />
+              <meshStandardMaterial color={getColorByCategory(skill.category)} />
+            </mesh>
+          </>
+        )}
+      </GLTFAsset>
       
-      {/* Buoy Pole */}
-      <mesh position={[0, 1.5, 0]} castShadow>
-        <cylinderGeometry args={[0.1, 0.1, 2]} />
-        <meshStandardMaterial color="#654321" />
-      </mesh>
-      
-      {/* Skill Level Indicator */}
-      <mesh position={[0, 1.5 + (skill.level / 100), 0]} castShadow>
-        <cylinderGeometry args={[0.15, 0.15, (skill.level / 100) * 2]} />
-        <meshStandardMaterial color={getColorByCategory(skill.category)} />
-      </mesh>
-      
-      {/* Skill Name */}
+      {/* Skill Name (always shows) */}
       <Text
         position={[0, 3, 0]}
         fontSize={0.4}
@@ -79,7 +90,7 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
         {skill.name}
       </Text>
       
-      {/* Skill Level Text */}
+      {/* Skill Level Text (always shows) */}
       <Text
         position={[0, 2.5, 0]}
         fontSize={0.3}

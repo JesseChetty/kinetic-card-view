@@ -6,6 +6,9 @@ export interface AssetConfig {
   path: string;
   type: 'model' | 'texture' | 'audio';
   description: string;
+  scale?: [number, number, number];
+  rotation?: [number, number, number];
+  position?: [number, number, number];
 }
 
 // Custom Boat Models
@@ -21,7 +24,10 @@ export const boatAssets: AssetConfig[] = [
   //   name: 'pirate-ship',
   //   path: '/models/pirate-ship.glb',
   //   type: 'model',
-  //   description: 'Custom pirate ship model'
+  //   description: 'Custom pirate ship model',
+  //   scale: [1, 1, 1],
+  //   rotation: [0, 0, 0],
+  //   position: [0, 0, 0]
   // }
 ];
 
@@ -54,14 +60,20 @@ export const lighthouseAssets: AssetConfig[] = [
     name: 'custom-lighthouse',
     path: '/models/lighthouse.glb',
     type: 'model',
-    description: 'User-provided GLB lighthouse model'
+    description: 'User-provided GLB lighthouse model',
+    scale: [2, 2, 2],
+    rotation: [0, 0, 0],
+    position: [0, 0, 0]
   },
   // Add your custom lighthouse models here:
   // {
   //   name: 'vintage-lighthouse',
   //   path: '/models/vintage-lighthouse.glb',
   //   type: 'model',
-  //   description: 'Vintage style lighthouse model'
+  //   description: 'Vintage style lighthouse model',
+  //   scale: [1, 1, 1],
+  //   rotation: [0, 0, 0],
+  //   position: [0, 0, 0]
   // }
 ];
 
@@ -78,7 +90,10 @@ export const buoyAssets: AssetConfig[] = [
   //   name: 'life-ring-buoy',
   //   path: '/models/life-ring.glb',
   //   type: 'model',
-  //   description: 'Life ring style buoy'
+  //   description: 'Life ring style buoy',
+  //   scale: [1, 1, 1],
+  //   rotation: [0, 0, 0],
+  //   position: [0, 0, 0]
   // }
 ];
 
@@ -125,7 +140,7 @@ export const selectedAssets = {
   sky: 'default-sky'
 };
 
-// Asset loading helper
+// Asset loading helpers
 export const getAssetPath = (category: keyof typeof selectedAssets): string => {
   const assetName = selectedAssets[category];
   let assets: AssetConfig[] = [];
@@ -150,4 +165,29 @@ export const getAssetPath = (category: keyof typeof selectedAssets): string => {
   
   const asset = assets.find(a => a.name === assetName);
   return asset?.path || '';
+};
+
+export const getAssetConfig = (category: keyof typeof selectedAssets): AssetConfig | null => {
+  const assetName = selectedAssets[category];
+  let assets: AssetConfig[] = [];
+  
+  switch (category) {
+    case 'boat':
+      assets = boatAssets;
+      break;
+    case 'ocean':
+      assets = oceanAssets;
+      break;
+    case 'lighthouse':
+      assets = lighthouseAssets;
+      break;
+    case 'buoy':
+      assets = buoyAssets;
+      break;
+    case 'sky':
+      assets = environmentAssets;
+      break;
+  }
+  
+  return assets.find(a => a.name === assetName) || null;
 };
