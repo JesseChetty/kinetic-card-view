@@ -18,6 +18,11 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
   const { setSelectedProject, setHoveredObject } = useGitlantisStore();
   const lighthouseConfig = getAssetConfig('lighthouse');
 
+  // Debug logging for lighthouse config
+  console.log('Lighthouse config:', lighthouseConfig);
+  console.log('Has path?', !!lighthouseConfig?.path);
+  console.log('Path value:', lighthouseConfig?.path);
+
   useFrame((state) => {
     if (lightRef.current) {
       // Rotating lighthouse light
@@ -51,68 +56,86 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
       }}
       onClick={handleClick}
     >
-      <GLTFAsset config={lighthouseConfig!}>
-        {/* Rotating Light */}
-        <group ref={lightRef} position={[0, 4, 0]}>
-          <mesh position={[0, 0, 0.8]}>
-            <boxGeometry args={[0.2, 0.5, 0.2]} />
-            <meshStandardMaterial color="#ffffff" emissive="#ffff00" emissiveIntensity={0.5} />
-          </mesh>
-        </group>
-        {/* Project Title */}
-        <Text
-          position={[0, 6.5, 0]}
-          fontSize={0.8}
-          color={hovered ? "#ff6b6b" : "#333"}
-          anchorX="center"
-          anchorY="middle"
-        >
-          {project.title}
-        </Text>
-        {/* Featured indicator */}
-        {project.featured && (
-          <mesh position={[0, 7.5, 0]}>
-            <sphereGeometry args={[0.3]} />
-            <meshStandardMaterial color="#ffd700" emissive="#ffa500" emissiveIntensity={0.3} />
-          </mesh>
-        )}
-        
-        {/* Default Lighthouse - only shows when no GLB model */}
-        {!lighthouseConfig?.path && (
-          <>
-            <Cylinder args={[1.5, 2, 8]} position={[0, 4, 0]} castShadow>
-              <meshStandardMaterial color={hovered ? "#ff6b6b" : "#e0e0e0"} />
-            </Cylinder>
-            <Cylinder args={[1.51, 2.01, 1]} position={[0, 2, 0]} castShadow>
-              <meshStandardMaterial color="#ff4757" />
-            </Cylinder>
-            <Cylinder args={[1.51, 2.01, 1]} position={[0, 6, 0]} castShadow>
-              <meshStandardMaterial color="#ff4757" />
-            </Cylinder>
-            <Cylinder args={[1, 1, 1.5]} position={[0, 9, 0]} castShadow>
-              <meshStandardMaterial color="#ffd700" />
-            </Cylinder>
-            <Cone args={[1.2, 2]} position={[0, 11, 0]} castShadow>
-              <meshStandardMaterial color="#8B0000" />
-            </Cone>
-            <Text
-              position={[0, 12.5, 0]}
-              fontSize={0.8}
-              color={hovered ? "#ff6b6b" : "#333"}
-              anchorX="center"
-              anchorY="middle"
-            >
-              {project.title}
-            </Text>
-            {project.featured && (
-              <mesh position={[0, 13.5, 0]}>
-                <sphereGeometry args={[0.3]} />
-                <meshStandardMaterial color="#ffd700" emissive="#ffa500" emissiveIntensity={0.3} />
-              </mesh>
-            )}
-          </>
-        )}
-      </GLTFAsset>
+      {/* Render GLB model if available, otherwise show default lighthouse */}
+      {lighthouseConfig?.path ? (
+        <>
+          {/* GLB Lighthouse Model */}
+          <GLTFAsset config={lighthouseConfig} />
+          
+          {/* Rotating Light for GLB model */}
+          <group ref={lightRef} position={[0, 4, 0]}>
+            <mesh position={[0, 0, 0.8]}>
+              <boxGeometry args={[0.2, 0.5, 0.2]} />
+              <meshStandardMaterial color="#ffffff" emissive="#ffff00" emissiveIntensity={0.5} />
+            </mesh>
+          </group>
+          
+          {/* Project Title for GLB model */}
+          <Text
+            position={[0, 6.5, 0]}
+            fontSize={0.8}
+            color={hovered ? "#ff6b6b" : "#333"}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {project.title}
+          </Text>
+          
+          {/* Featured indicator for GLB model */}
+          {project.featured && (
+            <mesh position={[0, 7.5, 0]}>
+              <sphereGeometry args={[0.3]} />
+              <meshStandardMaterial color="#ffd700" emissive="#ffa500" emissiveIntensity={0.3} />
+            </mesh>
+          )}
+        </>
+      ) : (
+        <>
+          {/* Default Geometric Lighthouse */}
+          <Cylinder args={[1.5, 2, 8]} position={[0, 4, 0]} castShadow>
+            <meshStandardMaterial color={hovered ? "#ff6b6b" : "#e0e0e0"} />
+          </Cylinder>
+          <Cylinder args={[1.51, 2.01, 1]} position={[0, 2, 0]} castShadow>
+            <meshStandardMaterial color="#ff4757" />
+          </Cylinder>
+          <Cylinder args={[1.51, 2.01, 1]} position={[0, 6, 0]} castShadow>
+            <meshStandardMaterial color="#ff4757" />
+          </Cylinder>
+          <Cylinder args={[1, 1, 1.5]} position={[0, 9, 0]} castShadow>
+            <meshStandardMaterial color="#ffd700" />
+          </Cylinder>
+          <Cone args={[1.2, 2]} position={[0, 11, 0]} castShadow>
+            <meshStandardMaterial color="#8B0000" />
+          </Cone>
+          
+          {/* Rotating Light for default lighthouse */}
+          <group ref={lightRef} position={[0, 9, 0]}>
+            <mesh position={[0, 0, 0.8]}>
+              <boxGeometry args={[0.2, 0.5, 0.2]} />
+              <meshStandardMaterial color="#ffffff" emissive="#ffff00" emissiveIntensity={0.5} />
+            </mesh>
+          </group>
+          
+          {/* Project Title for default lighthouse */}
+          <Text
+            position={[0, 12.5, 0]}
+            fontSize={0.8}
+            color={hovered ? "#ff6b6b" : "#333"}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {project.title}
+          </Text>
+          
+          {/* Featured indicator for default lighthouse */}
+          {project.featured && (
+            <mesh position={[0, 13.5, 0]}>
+              <sphereGeometry args={[0.3]} />
+              <meshStandardMaterial color="#ffd700" emissive="#ffa500" emissiveIntensity={0.3} />
+            </mesh>
+          )}
+        </>
+      )}
     </group>
   );
 };
