@@ -251,9 +251,19 @@ npm run preview
 - Lower canvas resolution in Canvas props
 
 ### Assets Not Loading
-- Verify files are in `public/` directory
-- Check file paths in `assets.ts`
-- Ensure correct file formats
+- Place models in `public/models/` (example: `public/models/lighthouse.glb`)
+- Configure `src/data/assets.ts` to point to your files:
+
+```ts
+export const lighthouseAssets = [
+  { name: 'custom-lighthouse', path: '/models/lighthouse.glb', type: 'model', description: 'My lighthouse' },
+  // ...
+];
+export const selectedAssets = { lighthouse: 'custom-lighthouse', /* ... */ };
+```
+- In the 3D world, lighthouses automatically use a GLB model when a path is set
+- Hard refresh (Ctrl/Cmd+Shift+R) to clear cache
+- Check DevTools Network tab that `/models/lighthouse.glb` returns 200
 
 ## 📦 Deployment
 

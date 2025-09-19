@@ -50,6 +50,12 @@ export const lighthouseAssets: AssetConfig[] = [
     type: 'model',
     description: 'Default geometric lighthouse'
   },
+  {
+    name: 'custom-lighthouse',
+    path: '/models/lighthouse.glb',
+    type: 'model',
+    description: 'User-provided GLB lighthouse model'
+  },
   // Add your custom lighthouse models here:
   // {
   //   name: 'vintage-lighthouse',
@@ -114,7 +120,7 @@ export const audioAssets: AssetConfig[] = [
 export const selectedAssets = {
   boat: 'default-boat',
   ocean: 'default-ocean',
-  lighthouse: 'default-lighthouse',
+  lighthouse: 'custom-lighthouse',
   buoy: 'default-buoy',
   sky: 'default-sky'
 };
