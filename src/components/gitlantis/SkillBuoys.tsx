@@ -14,7 +14,13 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
   const buoyRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const { setHoveredObject } = useGitlantisStore();
+  
+  // Debug logging
+  console.log('getAssetConfig function:', getAssetConfig);
+  console.log('Calling getAssetConfig with buoy');
+  
   const buoyConfig = getAssetConfig('buoy');
+  console.log('buoyConfig result:', buoyConfig);
 
   useFrame((state) => {
     if (buoyRef.current) {
