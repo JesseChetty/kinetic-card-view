@@ -14,14 +14,10 @@ interface ProjectLighthousesProps {
 const Lighthouse = ({ project, position, onSelect }: { project: any; position: [number, number, number]; onSelect: (project: any) => void }) => {
   const lighthouseRef = useRef<THREE.Group>(null);
   const lightRef = useRef<THREE.Group>(null);
+  const textRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const { setSelectedProject, setHoveredObject } = useGitlantisStore();
+  const { setSelectedProject, setHoveredObject, boatPosition } = useGitlantisStore();
   const lighthouseConfig = getAssetConfig('lighthouse');
-
-  // Debug logging for lighthouse config
-  console.log('Lighthouse config:', lighthouseConfig);
-  console.log('Has path?', !!lighthouseConfig?.path);
-  console.log('Path value:', lighthouseConfig?.path);
 
   useFrame((state) => {
     if (lightRef.current) {
@@ -32,6 +28,13 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
     if (lighthouseRef.current && hovered) {
       // Gentle floating animation when hovered
       lighthouseRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 2) * 0.1;
+    }
+
+    // Make text face the boat
+    if (textRef.current) {
+      const boatPos = new THREE.Vector3(...boatPosition);
+      const textPos = new THREE.Vector3(position[0], position[1] + (lighthouseConfig?.path ? 8 : 14), position[2]);
+      textRef.current.lookAt(boatPos);
     }
   });
 
@@ -72,7 +75,8 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
           
           {/* Project Title for GLB model */}
           <Text
-            position={[0, 6.5, 0]}
+            ref={textRef}
+            position={[0, 8, 0]}
             fontSize={0.8}
             color={hovered ? "#ff6b6b" : "#333"}
             anchorX="center"
@@ -118,7 +122,8 @@ const Lighthouse = ({ project, position, onSelect }: { project: any; position: [
           
           {/* Project Title for default lighthouse */}
           <Text
-            position={[0, 12.5, 0]}
+            ref={textRef}
+            position={[0, 14, 0]}
             fontSize={0.8}
             color={hovered ? "#ff6b6b" : "#333"}
             anchorX="center"

@@ -34,6 +34,7 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
     <div 
       id="gitlantis-explorer"
       className="relative w-full h-screen bg-gradient-to-b from-sky-300 via-sky-100 to-blue-500 overflow-hidden"
+      style={{ width: '100%', height: '100%' }}
     >
       <SEO 
         title="Portfolio Explorer - Interactive 3D Navigation"

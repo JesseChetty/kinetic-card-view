@@ -12,21 +12,28 @@ interface SkillBuoysProps {
 
 const Buoy = ({ skill, position }: { skill: any; position: [number, number, number] }) => {
   const buoyRef = useRef<THREE.Group>(null);
+  const nameTextRef = useRef<THREE.Mesh>(null);
+  const levelTextRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const { setHoveredObject } = useGitlantisStore();
-  
-  // Debug logging
-  console.log('getAssetConfig function:', getAssetConfig);
-  console.log('Calling getAssetConfig with buoy');
+  const { setHoveredObject, boatPosition } = useGitlantisStore();
   
   const buoyConfig = getAssetConfig('buoy');
-  console.log('buoyConfig result:', buoyConfig);
 
   useFrame((state) => {
     if (buoyRef.current) {
       // Simplified bobbing animation
       const time = state.clock.getElapsedTime();
       buoyRef.current.position.y = Math.sin(time * 1.5 + position[0]) * 0.3;
+    }
+
+    // Make text face the boat
+    if (nameTextRef.current) {
+      const boatPos = new THREE.Vector3(...boatPosition);
+      nameTextRef.current.lookAt(boatPos);
+    }
+    if (levelTextRef.current) {
+      const boatPos = new THREE.Vector3(...boatPosition);
+      levelTextRef.current.lookAt(boatPos);
     }
   });
 
@@ -87,8 +94,9 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
       
       {/* Skill Name (always shows) */}
       <Text
-        position={[0, 3, 0]}
-        fontSize={0.4}
+        ref={nameTextRef}
+        position={[0, 4, 0]}
+        fontSize={0.5}
         color={hovered ? getColorByCategory(skill.category) : "#333"}
         anchorX="center"
         anchorY="middle"
@@ -98,8 +106,9 @@ const Buoy = ({ skill, position }: { skill: any; position: [number, number, numb
       
       {/* Skill Level Text (always shows) */}
       <Text
-        position={[0, 2.5, 0]}
-        fontSize={0.3}
+        ref={levelTextRef}
+        position={[0, 3.3, 0]}
+        fontSize={0.4}
         color="#666"
         anchorX="center"
         anchorY="middle"
