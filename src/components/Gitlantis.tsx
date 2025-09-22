@@ -19,8 +19,22 @@ interface GitlantisProps {
 export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
   const { selectedProject, boatPosition } = useGitlantisStore();
 
+  const handleFullscreen = () => {
+    const explorerElement = document.getElementById('gitlantis-explorer');
+    if (explorerElement) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        explorerElement.requestFullscreen();
+      }
+    }
+  };
+
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-sky-300 via-sky-100 to-blue-500 overflow-hidden">
+    <div 
+      id="gitlantis-explorer"
+      className="relative w-full h-screen bg-gradient-to-b from-sky-300 via-sky-100 to-blue-500 overflow-hidden"
+    >
       <SEO 
         title="Portfolio Explorer - Interactive 3D Navigation"
         description="Explore my portfolio projects in an immersive 3D ocean world. Navigate through projects as lighthouses and skills as buoys."
@@ -76,16 +90,10 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
         <button
-          onClick={() => {
-            if (document.fullscreenElement) {
-              document.exitFullscreen();
-            } else {
-              document.documentElement.requestFullscreen();
-            }
-          }}
+          onClick={handleFullscreen}
           className="px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-lg hover:bg-background/90 transition-colors"
         >
-          ⛶ Fullscreen
+          ⛶ Fullscreen Explorer
         </button>
       </div>
 
