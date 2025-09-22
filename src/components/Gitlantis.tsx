@@ -29,7 +29,7 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       />
       
       <Canvas
-        camera={{ position: [0, 8, 15], fov: 75 }}
+        camera={{ position: [0, 12, 20], fov: 60 }}
         shadows
         className="w-full h-full"
         gl={{ antialias: true, alpha: true }}
@@ -72,6 +72,21 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       
       <div className="absolute top-4 left-4 z-10">
         <BreadcrumbTrail selectedProject={selectedProject} />
+      </div>
+      
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+        <button
+          onClick={() => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen();
+            }
+          }}
+          className="px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-lg hover:bg-background/90 transition-colors"
+        >
+          ⛶ Fullscreen
+        </button>
       </div>
 
       <Loading />
