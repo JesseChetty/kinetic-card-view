@@ -4,7 +4,7 @@ import { faLinkedin, faTwitter, faGithub } from '@fortawesome/free-brands-svg-ic
 import { skillsData, projectsData, testimonialsData, servicesData, contactInfo } from '../data/portfolioData';
 import { Gitlantis } from './Gitlantis';
 import { KeyboardControls } from '@react-three/drei';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,6 +14,7 @@ interface ModalProps {
 
 export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [isGitlantisFullscreen, setIsGitlantisFullscreen] = useState(false);
   
   if (!isOpen || !content) return null;
 
@@ -27,6 +28,17 @@ export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
   const handleProjectSelect = (project: any) => {
     setSelectedProject(project);
   };
+
+  // Listen for fullscreen changes on the gitlantis explorer
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const gitlantisElement = document.getElementById('gitlantis-explorer');
+      setIsGitlantisFullscreen(!!document.fullscreenElement && document.fullscreenElement === gitlantisElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   const renderContent = () => {
     switch (content.title) {
@@ -117,7 +129,7 @@ export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
               </KeyboardControls>
             </div>
 
-            {selectedProject && (
+            {selectedProject && !isGitlantisFullscreen && (
               <div className="glass-effect rounded-xl p-6 animate-fade-in">
                 <div className="flex items-start space-x-4">
                   <img 

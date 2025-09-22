@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Ocean } from './gitlantis/Ocean';
 import { Boat } from './gitlantis/Boat';
 import { ProjectLighthouses } from './gitlantis/ProjectLighthouses';
@@ -18,6 +18,7 @@ interface GitlantisProps {
 
 export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
   const { selectedProject, boatPosition } = useGitlantisStore();
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleFullscreen = () => {
     const explorerElement = document.getElementById('gitlantis-explorer');
@@ -29,6 +30,16 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       }
     }
   };
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   return (
     <div 
@@ -99,6 +110,63 @@ export const Gitlantis = ({ onProjectSelect }: GitlantisProps) => {
       </div>
 
       <Loading />
+      
+      {/* Project Details Overlay - Only show in fullscreen when project is selected */}
+      {isFullscreen && selectedProject && (
+        <div className="absolute bottom-4 left-4 right-4 z-20 max-w-md">
+          <div className="bg-background/90 backdrop-blur-sm border border-border rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              {selectedProject.image && (
+                <img 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title}
+                  className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-foreground mb-1">
+                  {selectedProject.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                  {selectedProject.description}
+                </p>
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {selectedProject.technologies?.map((tech: string) => (
+                    <span 
+                      key={tech}
+                      className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-md"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  {selectedProject.github && (
+                    <a 
+                      href={selectedProject.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1 text-xs bg-secondary hover:bg-secondary/80 rounded-md transition-colors"
+                    >
+                      Code
+                    </a>
+                  )}
+                  {selectedProject.live && (
+                    <a 
+                      href={selectedProject.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1 text-xs bg-primary hover:bg-primary/80 text-primary-foreground rounded-md transition-colors"
+                    >
+                      Live Demo
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
