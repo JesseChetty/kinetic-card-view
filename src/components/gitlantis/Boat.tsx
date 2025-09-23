@@ -91,23 +91,28 @@ export const Boat = () => {
   return (
     <group ref={boatRef} castShadow>
       <GLTFAsset config={boatConfig!}>
-        {/* Default Boat Hull */}
-        <mesh position={[0, 0, 0]} castShadow>
-          <boxGeometry args={[2, 0.5, 4]} />
-          <meshStandardMaterial color="#8B4513" />
-        </mesh>
-        
-        {/* Boat Mast */}
-        <mesh position={[0, 2, 0]} castShadow>
-          <cylinderGeometry args={[0.1, 0.1, 4]} />
-          <meshStandardMaterial color="#654321" />
-        </mesh>
-        
-        {/* Sail */}
-        <mesh position={[1, 2, 0]} castShadow>
-          <planeGeometry args={[2, 3]} />
-          <meshStandardMaterial color="#ffffff" side={2} />
-        </mesh>
+        {/* Default Boat - only shows when no GLB model */}
+        {!boatConfig?.path && (
+          <>
+            {/* Default Boat Hull */}
+            <mesh position={[0, 0, 0]} castShadow>
+              <boxGeometry args={[2, 0.5, 4]} />
+              <meshStandardMaterial color="#8B4513" />
+            </mesh>
+            
+            {/* Boat Mast */}
+            <mesh position={[0, 2, 0]} castShadow>
+              <cylinderGeometry args={[0.1, 0.1, 4]} />
+              <meshStandardMaterial color="#654321" />
+            </mesh>
+            
+            {/* Sail */}
+            <mesh position={[1, 2, 0]} castShadow>
+              <planeGeometry args={[2, 3]} />
+              <meshStandardMaterial color="#ffffff" side={2} />
+            </mesh>
+          </>
+        )}
       </GLTFAsset>
     </group>
   );

@@ -19,16 +19,15 @@ export const boatAssets: AssetConfig[] = [
     type: 'model',
     description: 'Default geometric boat made from Three.js primitives'
   },
-  // Add your custom boat models here:
-  // {
-  //   name: 'pirate-ship',
-  //   path: '/models/pirate-ship.glb',
-  //   type: 'model',
-  //   description: 'Custom pirate ship model',
-  //   scale: [1, 1, 1],
-  //   rotation: [0, 0, 0],
-  //   position: [0, 0, 0]
-  // }
+  {
+    name: 'cartoon-boat',
+    path: '/models/boat_cartoon_3d.glb',
+    type: 'model',
+    description: 'Custom cartoon boat model',
+    scale: [1.5, 1.5, 1.5],
+    rotation: [0, Math.PI, 0],
+    position: [0, 0.2, 0]
+  }
 ];
 
 // Ocean Textures
@@ -85,16 +84,15 @@ export const buoyAssets: AssetConfig[] = [
     type: 'model',
     description: 'Default spherical buoy'
   },
-  // Add your custom buoy models here:
-  // {
-  //   name: 'life-ring-buoy',
-  //   path: '/models/life-ring.glb',
-  //   type: 'model',
-  //   description: 'Life ring style buoy',
-  //   scale: [1, 1, 1],
-  //   rotation: [0, 0, 0],
-  //   position: [0, 0, 0]
-  // }
+  {
+    name: 'custom-buoy',
+    path: '/models/buoy.glb',
+    type: 'model',
+    description: 'Custom buoy model',
+    scale: [2, 2, 2],
+    rotation: [0, 0, 0],
+    position: [0, 0, 0]
+  }
 ];
 
 // Sky/Environment Assets
@@ -133,10 +131,10 @@ export const audioAssets: AssetConfig[] = [
 
 // Currently selected assets (change these to use your custom assets)
 export const selectedAssets = {
-  boat: 'default-boat',
+  boat: 'cartoon-boat',
   ocean: 'default-ocean',
   lighthouse: 'custom-lighthouse',
-  buoy: 'default-buoy',
+  buoy: 'custom-buoy',
   sky: 'default-sky'
 };
 
