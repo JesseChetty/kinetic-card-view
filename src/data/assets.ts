@@ -25,7 +25,7 @@ export const boatAssets: AssetConfig[] = [
     type: 'model',
     description: 'Custom cartoon boat model',
     scale: [1.5, 1.5, 1.5],
-    rotation: [0, Math.PI, 0],
+    rotation: [0, -Math.PI / 2, 0],
     position: [0, 0.2, 0]
   }
 ];
@@ -89,7 +89,7 @@ export const buoyAssets: AssetConfig[] = [
     path: '/models/buoy.glb',
     type: 'model',
     description: 'Custom buoy model',
-    scale: [2, 2, 2],
+    scale: [0.67, 0.67, 0.67],
     rotation: [0, 0, 0],
     position: [0, 0, 0]
   }
