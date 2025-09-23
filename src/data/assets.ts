@@ -90,7 +90,7 @@ export const buoyAssets: AssetConfig[] = [
     type: 'model',
     description: 'Custom buoy model',
     scale: [0.67, 0.67, 0.67],
-    rotation: [0, 0, 0],
+    rotation: [-Math.PI / 2, 0, 0],
     position: [0, 0, 0]
   }
 ];
