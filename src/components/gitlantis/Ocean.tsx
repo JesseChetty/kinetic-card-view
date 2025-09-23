@@ -1,24 +1,26 @@
 import { useRef } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
-import waterTexture from '../../assets/water-texture.jpg';
+import waterTexture from '../../assets/seamless-water.jpg';
 
 export const Ocean = () => {
   const oceanRef = useRef<THREE.Mesh>(null);
   const texture = useLoader(THREE.TextureLoader, waterTexture);
   
-  // Configure texture for tiling
+  // Configure texture for seamless tiling
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(20, 20);
+  texture.repeat.set(8, 8);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
 
   useFrame((state) => {
     if (oceanRef.current) {
       const time = state.clock.getElapsedTime();
       // Simple wave animation
       oceanRef.current.position.y = Math.sin(time * 0.5) * 0.1;
-      // Animate texture for flowing water effect
-      texture.offset.x = time * 0.01;
-      texture.offset.y = time * 0.005;
+      // Subtle texture animation for flowing water effect
+      texture.offset.x = time * 0.003;
+      texture.offset.y = time * 0.002;
     }
   });
 
