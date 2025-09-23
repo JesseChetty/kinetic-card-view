@@ -7,11 +7,14 @@ interface GLTFAssetProps {
 }
 
 export const GLTFAsset = ({ config, children }: GLTFAssetProps) => {
+  // Always call hooks at the top level - never conditionally
+  const gltf = config.path ? useGLTF(config.path) : null;
+  
   if (!config.path) {
     return <>{children}</>;
   }
 
-  const { scene } = useGLTF(config.path);
+  const { scene } = gltf!;
   
   // Clone the scene to avoid sharing between multiple instances
   const clonedScene = scene.clone();
