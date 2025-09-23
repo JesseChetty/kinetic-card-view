@@ -16,7 +16,8 @@ export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isGitlantisFullscreen, setIsGitlantisFullscreen] = useState(false);
   
-  if (!isOpen || !content) return null;
+  // Defer early return until after hooks to keep hook order stable
+
 
   const keyboardMap = [
     { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
@@ -39,6 +40,8 @@ export const Modal = ({ isOpen, content, onClose }: ModalProps) => {
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
+
+  if (!isOpen || !content) return null;
 
   const renderContent = () => {
     switch (content.title) {
